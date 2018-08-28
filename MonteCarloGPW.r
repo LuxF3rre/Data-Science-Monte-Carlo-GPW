@@ -1,25 +1,38 @@
+#
+# To be used in KNIME node.
+#
 library(MonteCarlo)
+
+interval_prediction_grid <- c(1) # in years
+expected_annual_return_grid <- c(0.15)
+numer_of_last_data <- 365 # in days
 
 rframe <- knime.in
 
-lastest_stock_price <- tail(rframe$"<CLOSE>", n=1)
-return_std_deviation <- sd(rframe$"<CLOSE>")
+stock_name <- tail(rframe$"<TICKER>", n = 1)
 
-Black_Scholes <- function(risk_free_intrest_rate, forecast_time) { 
+lastest_stock_price <- tail(rframe$"<CLOSE>", n = 1)
+
+last_year_stock_prices <- tail(rframe$"<CLOSE>", n = numer_of_last_data)
+last_year_stock_daily_return <- diff(last_year_stock_prices) / last_year_stock_prices[-length(vector)]
+last_year_stock_daily_return_sd <- sd(last_year_stock_daily_return)
+
+expected_annual_volatility <- last_year_stock_daily_return_sd / sqrt(1 / numer_of_last_data)
+
+GBM <- function(expected_annual_return, interval_prediction) { 
   nradom <- rnorm(1, 0, 1)
-  return(list("price"=lastest_stock_price * exp((risk_free_intrest_rate - 0.5 * return_std_deviation ^ 2) * forecast_time + return_std_deviation * sqrt(forecast_time) * nradom)))
+  return(list("price"=lastest_stock_price * exp((expected_annual_return - 0.5 * expected_annual_volatility ^ 2) * interval_prediction + expected_annual_volatility * sqrt(interval_prediction) * nradom)))
 }
 
-GBM <- function(risk_free_intrest_rate, forecast_time) {
-    nradom <- rnorm(1, 0, 1)
-    eturn(list("price"=lastest_stock_price + lastest_stock_price * (risk_free_intrest_rate * forecast_time + return_std_deviation * nradom * sqrt(forecast_time))))
-}
+param_list = list ("expected_annual_return" = expected_annual_return_grid, "interval_prediction" = interval_prediction_grid)
 
-risk_free_intrest_rate_grid <- c(0.024)
-forecast_time_grid <- c(2555)
+MC_result <- MonteCarlo(func=GBM, nrep=1000, param_list=param_list)
 
-param_list = list ("risk_free_intrest_rate" = risk_free_intrest_rate_grid, "forecast_time" = forecast_time_grid)
+forecasted_prices <- MC_result$results$price
 
-MC_result <- MonteCarlo(func=Black_Scholes, nrep=1000, param_list=param_list)
+hist(forecasted_prices,
+  main="Histogram for forecasted prices",
+  xlab="Prices",
+  prob = TRUE)
 
-MakeTable(output=MC_result, rows="risk_free_intrest_rate", cols="forecast_time", digits=2, include_meta=FALSE)
+lines(density(forecasted_prices))
