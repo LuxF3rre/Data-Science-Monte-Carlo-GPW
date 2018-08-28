@@ -9,8 +9,6 @@ numer_of_last_data <- 365 # in days
 
 rframe <- knime.in
 
-stock_name <- tail(rframe$"<TICKER>", n = 1)
-
 lastest_stock_price <- tail(rframe$"<CLOSE>", n = 1)
 
 last_year_stock_prices <- tail(rframe$"<CLOSE>", n = numer_of_last_data)
@@ -32,7 +30,4 @@ forecasted_prices <- MC_result$results$price
 
 hist(forecasted_prices,
   main="Histogram for forecasted prices",
-  xlab="Prices",
-  prob = TRUE)
-
-lines(density(forecasted_prices))
+  xlab="Prices")
