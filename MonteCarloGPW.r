@@ -30,4 +30,5 @@ forecasted_prices <- MC_result$results$price
 
 hist(forecasted_prices,
   main="Histogram for forecasted prices",
-  xlab="Prices")
+  xlab="Prices",
+  breaks=20)
