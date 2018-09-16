@@ -46,36 +46,44 @@ percent_below <- function(target_value, target_list) {
   i <- 1
   for (price in sorted) {
     if (price == target_value) {
-      if (price != sorted[i + 1]) {
+      if (price != sorted[i + 1] & i != length(sorted)) {
         return (1 - (i / length(sorted)))
+      } else {
+        return (0)
       }
     } else if (price < target_value) {
-      return (1 - ((i - 1) / length(sorted)))
-    } else {
+        return (1 - ((i - 1) / length(sorted)))
+    } else if (i == length(sorted)) {
       return (0)
     }
     i <- i + 1
   }
 }
 
-fc_minumum <- min(forecasted_prices)
-fc_maximum <- max(forecasted_prices)
-fc_mean <- mean(forecasted_prices)
-fc_median <- median(forecasted_prices)
-fc_dominant <- findDominants(forecasted_prices)
-fc_sd <- sd(forecasted_prices)
-fc_skewness <- skewness(forecasted_prices)
-fc_kurtosis <-kurtosis(forecasted_prices)
-fc_1q <- quantile(forecasted_prices, .25)
-fc_3q <- quantile(forecasted_prices, .75)
-fc_5c <- quantile(forecasted_prices, .05)
-fc_95c <- quantile(forecasted_prices, .95)
-fc_percent_of_above_target <- 1 - percent_below(target_price, forecasted_prices)
-fc_percent_of_below_target <- percent_below(target_price, forecasted_prices)
-fc_mean_minus_2sd <- fc_mean - 2 * fc_sd
-fc_mean_minus_1sd <- fc_mean - 1 * fc_sd
-fc_mean_plus_1sd <- fc_mean + 1 * fc_sd
-fc_mean_plus_2sd <- fc_mean + 2 * fc_sd
+statisticsMonteCarlo <- function(population, target_price) {
+  population_minumum <- min(population)
+  population_maximum <- max(population)
+  population_mean <- mean(population)
+  population_median <- median(population)
+  population_dominant <- findDominants(population)
+  population_sd <- sd(population)
+  population_skewness <- skewness(population)
+  population_kurtosis <-kurtosis(population)
+  population_1q <- quantile(population, .25)
+  population_3q <- quantile(population, .75)
+  population_5c <- quantile(population, .05)
+  population_95c <- quantile(population, .95)
+  population_percent_of_above_target <- 1 - percent_below(target_price, population)
+  population_percent_of_below_target <- percent_below(target_price, population)
+  population_mean_minus_2sd <- population_mean - 2 * population_sd
+  population_mean_minus_1sd <- population_mean - 1 * population_sd
+  population_mean_plus_1sd <- population_mean + 1 * population_sd
+  population_mean_plus_2sd <- population_mean + 2 * population_sd
+  
+  return(data.frame(population_minumum, population_maximum, population_mean, population_median, population_dominant, population_sd, population_skewness, population_kurtosis, population_1q, population_3q, population_5c, population_95c, population_percent_of_above_target, population_percent_of_below_target, population_mean_minus_2sd, population_mean_minus_1sd, population_mean_plus_1sd, population_mean_plus_2sd, row.names = "Monte Carlo Statistics"))
+}
+
+statistics <- statisticsMonteCarlo(forecasted_prices, target_price)
 
 hist(forecasted_prices,
      main=paste("Forecasted price of", stock_name),
