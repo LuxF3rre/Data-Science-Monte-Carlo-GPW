@@ -17,7 +17,7 @@ stock_name <- tail(rframe$"<TICKER>", n = 1)
 lastest_stock_price <- tail(rframe$"<CLOSE>", n = 1)
 
 last_year_stock_prices <- tail(rframe$"<CLOSE>", n = number_of_last_data)
-last_year_stock_daily_return <- diff(last_year_stock_prices) / last_year_stock_prices[-length(vector)]
+last_year_stock_daily_return <- diff(last_year_stock_prices) / last_year_stock_prices[1:length(last_year_stock_prices)-1]
 last_year_stock_daily_return_sd <- sd(last_year_stock_daily_return)
 
 expected_annual_volatility <- last_year_stock_daily_return_sd / sqrt(1 / number_of_last_data)
