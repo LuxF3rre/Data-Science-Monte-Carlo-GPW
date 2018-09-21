@@ -80,7 +80,7 @@ statisticsMonteCarlo <- function(population, target_price) {
   population_mean_plus_1sd <- population_mean + 1 * population_sd
   population_mean_plus_2sd <- population_mean + 2 * population_sd
   
-  return(data.frame(population_minumum, population_maximum, population_mean, population_median, population_dominant, population_sd, population_skewness, population_kurtosis, population_1q, population_3q, population_5c, population_95c, population_percent_of_above_target, population_percent_of_below_target, population_mean_minus_2sd, population_mean_minus_1sd, population_mean_plus_1sd, population_mean_plus_2sd, row.names = "Monte Carlo Statistics"))
+  return(data.frame(population_minumum, population_maximum, population_mean, population_median, population_dominant, population_sd, population_skewness, population_kurtosis, population_1q, population_3q, population_5c, population_95c, population_percent_of_above_target, population_percent_of_below_target, population_mean_minus_2sd, population_mean_minus_1sd, population_mean_plus_1sd, population_mean_plus_2sd, row.names = stock_name))
 }
 
 statistics <- statisticsMonteCarlo(forecasted_prices, target_price)
