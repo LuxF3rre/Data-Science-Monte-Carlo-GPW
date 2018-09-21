@@ -1,37 +1,41 @@
 #
 # To be used in KNIME node.
 #
-library(MonteCarlo)
+
 library(moments)
 
 rframe <- knime.in
+stock_prices <- rframe$"<CLOSE>"
 
-interval_prediction_grid <- c(1) # in years
-expected_annual_return_grid <- c(0.15)
+interval_prediction <- 1 # in years
+expected_annual_return <- 0.15 #in percent
 number_of_last_data <- 365 # in days
 number_of_simulations <- 100000
-target_price <- tail(rframe$"<CLOSE>", n = 1)
+target_price <- tail(stock_prices, n = 1)
 
-stock_name <- tail(rframe$"<TICKER>", n = 1)
+stock_name <- rframe$"<TICKER>"[[1]]
+lastest_stock_price <- tail(stock_prices, n = 1)
 
-lastest_stock_price <- tail(rframe$"<CLOSE>", n = 1)
+args = list ("lastest_stock_price" = lastest_stock_price, "expected_annual_return" = expected_annual_return, "interval_prediction" = interval_prediction)
 
-last_year_stock_prices <- tail(rframe$"<CLOSE>", n = number_of_last_data)
-last_year_stock_daily_return <- diff(last_year_stock_prices) / last_year_stock_prices[1:length(last_year_stock_prices)-1]
-last_year_stock_daily_return_sd <- sd(last_year_stock_daily_return)
-
-expected_annual_volatility <- last_year_stock_daily_return_sd / sqrt(1 / number_of_last_data)
-
-GBM <- function(expected_annual_return, interval_prediction) { 
-  nradom <- rnorm(1, 0, 1)
-  return (list("price"=lastest_stock_price * exp((expected_annual_return - 0.5 * expected_annual_volatility ^ 2) * interval_prediction + expected_annual_volatility * sqrt(interval_prediction) * nradom)))
+expectedAnnualVolatility <- function(stock_prices, number_of_last_data) {
+    stock_prices <- tail(stock_prices, n = number_of_last_data)
+    stock_daily_return <- diff(stock_prices) / stock_prices[1:length(stock_prices)-1]
+    stock_daily_return_sd <- sd(stock_daily_return)
+    return(stock_daily_return_sd / sqrt(1 / number_of_last_data))
 }
 
-param_list = list ("expected_annual_return" = expected_annual_return_grid, "interval_prediction" = interval_prediction_grid)
+geometricBrownianMotionStockPrice <- function(lastest_stock_price, expected_annual_return, expected_annual_volatility, interval_prediction) { 
+  nradom <- rnorm(1, 0, 1)
+  return(lastest_stock_price * exp((expected_annual_return - 0.5 * expected_annual_volatility ^ 2) * interval_prediction + expected_annual_volatility * sqrt(interval_prediction) * nradom))
+}
 
-MC_result <- MonteCarlo(func=GBM, nrep=number_of_simulations, param_list=param_list)
-
-forecasted_prices <- MC_result$results$price
+simpleMonteCarlo <- function(function, args, number_of_simulations) {
+    simulations <- replicate(number_of_simulations, {
+        do.call(function, args)
+    })
+    return(simulations)
+}
 
 findDominants <- function(x) {
   if (length(unique(table(x))) == 1) {
@@ -79,11 +83,18 @@ statisticsMonteCarlo <- function(population, target_price) {
   population_mean_minus_1sd <- population_mean - 1 * population_sd
   population_mean_plus_1sd <- population_mean + 1 * population_sd
   population_mean_plus_2sd <- population_mean + 2 * population_sd
-  
-  return(data.frame(population_minumum, population_maximum, population_mean, population_median, population_dominant, population_sd, population_skewness, population_kurtosis, population_1q, population_3q, population_5c, population_95c, population_percent_of_above_target, population_percent_of_below_target, population_mean_minus_2sd, population_mean_minus_1sd, population_mean_plus_1sd, population_mean_plus_2sd, row.names = stock_name))
+  return(data.frame("Minimum" = population_minumum, "Maximum" = population_maximum, "Mean" = population_mean, "Median" = population_median, "Dominant" = population_dominant, "Standard deviation" = population_sd, "Skewness" = population_skewness, "Kurtosis" = population_kurtosis, "1Q" = population_1q, "3Q" = population_3q, "5C" = population_5c, "95C" = population_95c, "Percent above targer" = population_percent_of_above_target, "Percent below target" = population_percent_of_below_target, "Mean - 2sd" = population_mean_minus_2sd, "Mean - 1sd" = population_mean_minus_1sd, "Mean + 1sd" = population_mean_plus_1sd, "Mean + 2sd" = population_mean_plus_2sd, row.names = stock_name))
 }
 
+expected_annual_volatility <- expectedAnnualVolatility(stock_prices, number_of_last_data)
+
+forecasted_prices <- simpleMonteCarlo(geometricBrownianMotionStockPrice, args, number_of_simulations)
+
 statistics <- statisticsMonteCarlo(forecasted_prices, target_price)
+
+#
+# To be used in KNIME node.
+#
 
 hist(forecasted_prices,
      main=paste("Forecasted price of", stock_name),
