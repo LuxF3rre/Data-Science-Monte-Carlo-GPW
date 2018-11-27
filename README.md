@@ -6,36 +6,34 @@ Kompletny opis podstawy teoretycznej znajduję się [tutaj](https://ro.uow.edu.a
 ### Ruchy Browna
 
 Wzór na przyszłą cenę jest następujący:
-$$
-S_{t+\Delta t} = S_t \exp[(\mu - \frac{\sigma^2}{2})\Delta t+\sigma \varepsilon \sqrt{\Delta t}]
-$$
+
+![Wzór na ruch Browna](https://latex.codecogs.com/gif.latex?S_%7Bt+%5CDelta%20t%7D%20%3D%20S_t%20%5Cexp%5B%28%5Cmu%20-%20%5Cfrac%7B%5Csigma%5E2%7D%7B2%7D%29%5CDelta%20t+%5Csigma%20%5Cvarepsilon%20%5Csqrt%7B%5CDelta%20t%7D%5D)
+
 Gdzie:
 
-$S_{t + \Delta t}$ - przyszła cena akcji
+![](https://latex.codecogs.com/gif.latex?S_%7Bt%20+%20%5CDelta%20t%7D) - przyszła cena akcji
 
-S_t - obecna cena akcji
+![](https://latex.codecogs.com/gif.latex?S_t) - obecna cena akcji
 
-\mu - spodziewana stopa zwrotu
+![](https://latex.codecogs.com/gif.latex?%5Cmu) - spodziewana stopa zwrotu
 
-\sigma - spodziewana roczna zmienność
+![](https://latex.codecogs.com/gif.latex?%5Csigma) - spodziewana roczna zmienność
 
-$\varepsilon$ - zmienna losowa o rozkładzie normalnym ze średnią 0 i odchyleniu standardowym 1
+![](https://latex.codecogs.com/gif.latex?%5Cvarepsilon) - zmienna losowa o rozkładzie normalnym ze średnią 0 i odchyleniu standardowym 1
 
-\Delta t - interwał prognozy w latach
+![](https://latex.codecogs.com/gif.latex?%5CDelta%20t) - interwał prognozy w latach
 
 ### Obliczanie rocznej zmienności
 
-$$
-\sigma = \frac{s}{\sqrt{\tau}}
-$$
+![](https://latex.codecogs.com/gif.latex?%5Csigma%20%3D%20%5Cfrac%7Bs%7D%7B%5Csqrt%7B%5Ctau%7D%7D)
 
 Gdzie:
 
-$\sigma$ - spodziewana roczna zmienność
+![](https://latex.codecogs.com/gif.latex?%5Csigma) - spodziewana roczna zmienność
 
-$s$ - dzienne odchylenie standardowe
+![](https://latex.codecogs.com/gif.latex?s) - dzienne odchylenie standardowe
 
-$\tau$ - interwał mierzony w latach
+![](https://latex.codecogs.com/gif.latex?%5Ctau) - interwał mierzony w latach
 
 ### Metoda Monte Carlo
 
