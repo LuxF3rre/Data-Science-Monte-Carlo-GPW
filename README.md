@@ -3,11 +3,41 @@
 
 Kompletny opis podstawy teoretycznej znajduję się [tutaj](https://ro.uow.edu.au/cgi/viewcontent.cgi?article=1705&context=aabfj).
 
-Ruchy Browna
+### Ruchy Browna
 
-Obliczanie rocznej zmienności
+Wzór na przyszłą cenę jest następujący:
+$$
+S_{t+\Delta t} = S_t \exp[(\mu - \frac{\sigma^2}{2})\Delta t+\sigma \varepsilon \sqrt{\Delta t}]
+$$
+Gdzie:
 
-Metoda Monte Carlo
+$S_{t + \Delta t}$ - przyszła cena akcji
+
+S_t - obecna cena akcji
+
+\mu - spodziewana stopa zwrotu
+
+\sigma - spodziewana roczna zmienność
+
+$\varepsilon$ - zmienna losowa o rozkładzie normalnym ze średnią 0 i odchyleniu standardowym 1
+
+\Delta t - interwał prognozy w latach
+
+### Obliczanie rocznej zmienności
+
+$$
+\sigma = \frac{s}{\sqrt{\tau}}
+$$
+
+Gdzie:
+
+$\sigma$ - spodziewana roczna zmienność
+
+$s$ - dzienne odchylenie standardowe
+
+$\tau$ - interwał mierzony w latach
+
+### Metoda Monte Carlo
 
 ## Założenia projektu
 
@@ -19,5 +49,10 @@ Dodatkowo pisząc algorytm do workflow, wszelkie możliwe jego części mają zo
 
 ## Schemat workflow
 ![Schemat workflow](https://github.com/LuxF3rre/Data-Science-Monte-Carlo-GPW/blob/master/Schemat.svg)
+## Zmienne modelu
+
+
+
 ## Przykładowy wynik analizy
+
 ![Projekcja ceny CD Projekt](https://github.com/LuxF3rre/Data-Science-Monte-Carlo-GPW/blob/master/CDPROJEKT.mst.png)
