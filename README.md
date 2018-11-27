@@ -33,7 +33,9 @@ Gdzie:
 
 ![](https://latex.codecogs.com/gif.latex?s) - dzienne odchylenie standardowe ceny akcji
 
-![](https://latex.codecogs.com/gif.latex?%5Ctau) - interwał mierzony w latach. Zakładamy, że w roku jest 250 dni z możliwością handlu akcjami, więc ![](https://latex.codecogs.com/gif.latex?%5Ctau%20%3D%20%5Cfrac%7B1%7D%7B250%7D)
+![](https://latex.codecogs.com/gif.latex?%5Ctau) - interwał mierzony w latach. Zakładamy, że w roku jest 250 dni z możliwością handlu akcjami, więc:
+
+![](https://latex.codecogs.com/gif.latex?%5Ctau%20%3D%20%5Cfrac%7B1%7D%7B250%7D)
 
 ### Metoda Monte Carlo
 
