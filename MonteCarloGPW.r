@@ -16,8 +16,6 @@ target_price <- tail(stock_prices, n = 1)
 stock_name <- rframe$"<TICKER>"[[1]]
 lastest_stock_price <- tail(stock_prices, n = 1)
 
-args = list ("lastest_stock_price" = lastest_stock_price, "expected_annual_return" = expected_annual_return, "interval_prediction" = interval_prediction)
-
 expectedAnnualVolatility <- function(stock_prices, number_of_last_data) {
     stock_prices <- tail(stock_prices, n = number_of_last_data)
     stock_daily_return <- diff(stock_prices) / stock_prices[1:length(stock_prices)-1]
@@ -30,9 +28,9 @@ geometricBrownianMotionStockPrice <- function(lastest_stock_price, expected_annu
   return(lastest_stock_price * exp((expected_annual_return - 0.5 * expected_annual_volatility ^ 2) * interval_prediction + expected_annual_volatility * sqrt(interval_prediction) * nradom))
 }
 
-simpleMonteCarlo <- function(function, args, number_of_simulations) {
+simpleMonteCarlo <- function(func, args, number_of_simulations) {
     simulations <- replicate(number_of_simulations, {
-        do.call(function, args)
+        do.call(func, args)
     })
     return(simulations)
 }
@@ -87,6 +85,8 @@ statisticsMonteCarlo <- function(population, target_price) {
 }
 
 expected_annual_volatility <- expectedAnnualVolatility(stock_prices, number_of_last_data)
+
+args = list ("lastest_stock_price" = lastest_stock_price, "expected_annual_return" = expected_annual_return, "expected_annual_volatility" = expected_annual_volatility, "interval_prediction" = interval_prediction)
 
 forecasted_prices <- simpleMonteCarlo(geometricBrownianMotionStockPrice, args, number_of_simulations)
 
