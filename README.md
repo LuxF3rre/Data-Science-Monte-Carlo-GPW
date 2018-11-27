@@ -20,4 +20,4 @@ Dodatkowo pisząc algorytm do workflow, wszelkie możliwe jego części mają zo
 ## Schemat workflow
 ![Schemat workflow](https://github.com/LuxF3rre/Data-Science-Monte-Carlo-GPW/blob/master/Schemat.svg)
 ## Przykładowy wynik analizy
-![]()
+![Projekcja ceny CD Projekt](https://github.com/LuxF3rre/Data-Science-Monte-Carlo-GPW/blob/master/CDPROJEKT.mst.png)
